@@ -1,0 +1,23 @@
+service: raindrop-slack-daily-notification
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-northeast-1
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  notify:
+    handler: src/handler.notify
+    name: ${sls:stage}-raindrop-daily-notification
+    description: Notify Articles read on raindrop.io to Slack daily
+    runtime: nodejs18.x
+    environment:
+      RAINDROP_ACEESS_KEY: ${env:RAINDROP_ACEESS_KEY}
+    events:
+      - schedule: cron(50 0 * * ? *)
