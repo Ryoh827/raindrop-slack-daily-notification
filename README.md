@@ -32,17 +32,18 @@ $ yarn run sls deploy
 
 Now, the script will send daily notifications to your designated Slack channel with the articles you read on Raindrop.io that day.
 
-If you want to change the schedule, you can modify the `rate` option in the `serverless.yml` file.
+If you want to change the schedule, you can modify the `cron` option in the `serverless.yml` file.
 
 ```
 functions:
-  main:
-    handler: handler.main
+  notify:
+    handler: handler.notify
+    ...
     events:
-      - schedule: rate(1 day)
+      - schedule: cron(10 0 * * ? *)
 ```
 
-For example, to send the notification every 6 hours, you can change the rate to `rate(6 hours)`.
+For example, to send the notification every 6 hours, you can change the cron to `cron(0 0/6 * * ? *)`.
 
 ### Troubleshooting
 
