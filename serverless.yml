@@ -19,5 +19,6 @@ functions:
     runtime: nodejs18.x
     environment:
       RAINDROP_ACEESS_KEY: ${env:RAINDROP_ACEESS_KEY}
+      SLACK_WEBHOOK_URL: ${env:SLACK_WEBHOOK_URL}
     events:
       - schedule: cron(50 0 * * ? *)
