@@ -7,6 +7,7 @@ export const notify: Handler = async (_event, _context) => {
   const raindrops: Raindrop.Raindrop[] = await client.getAllRaindrops();
 
   // filter raindrops updated yesterday
+  // INFO: this list maybe includes raindrops created yesterday
   const raindropsUpdatedYesterday = raindrops.filter((raindrop: any) => {
     const updatedAt = new Date(raindrop.lastUpdate);
     const yesterday = new Date();
@@ -14,9 +15,29 @@ export const notify: Handler = async (_event, _context) => {
     return updatedAt > yesterday;
   });
 
+  // filter raindrops created yesterday
+  const raindropsCreatedYesterday = raindrops.filter((raindrop: any) => {
+    const createdAt = new Date(raindrop.created);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return createdAt > yesterday;
+  });
+
   const text = [
-    `昨日のRaindrop.ioの更新数: ${raindropsUpdatedYesterday.length}`,
+    `昨日のRaindrop.ioの登録数: ${raindropsCreatedYesterday.length}件`,
   ];
+  // add titles link of raindrops created yesterday to text
+  raindropsCreatedYesterday.forEach((raindrop: any) => {
+    text.push(`- <${raindrop.link}|${raindrop.title}>`);
+  });
+
+  text.push('---');
+  text.push(`昨日のRaindrop.ioの更新数: ${raindropsUpdatedYesterday.length}件`);
+  // add titles link of raindrops read yesterday to text
+  raindropsUpdatedYesterday.forEach((raindrop: any) => {
+    text.push(`- <${raindrop.link}|${raindrop.title}>`);
+  });
+
   const payload = {
     text: text.join('\n'),
   };

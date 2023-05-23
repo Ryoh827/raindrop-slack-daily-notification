@@ -10,6 +10,8 @@ export interface Raindrop {
     url: string;
   };
   domain: string;
+  lastUpdate: string;
+  created: string;
 }
 
 export interface RaindropCollection {
